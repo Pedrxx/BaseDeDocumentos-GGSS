@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GOVERNANÇA E GESTÃO DE SERVIÇOS DE SOFTWARE (GGSS)</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+    header {
+        background-color: #f2f2f2;
+        color: #333;
+        padding: 20px;
+        text-align: center;
+    }
+    h1 {
+        margin-top: 0;
+    }
+    .container {
+        max-width: 800px;
+        margin: 0 auto; /* Centraliza o contêiner na tela */
+        padding: 20px;
+    }
+    h2 {
+        padding-left: 25px;
+        margin-top: 30px;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+    th, td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+    th {
+        background-color: #f2f2f2;
+    }
+    .link {
+        display: inline-block;
+        background-color: #4CAF50;
+        color: white;
+        padding: 8px 16px;
+        text-align: center;
+        text-decoration: none;
+        border-radius: 4px;
+    }
+    .link:hover {
+        background-color: #45a049;
+    }
+</style>
+</head>
+<body>
+
+<header>
+    <h1>GOVERNANÇA E GESTÃO DE SERVIÇOS DE SOFTWARE (GGSS)</h1>
+    <p>Sistema de Gestão de Documentos e Contatos</p>
+</header>
+
+<div class="container">
+    <h2>Alunos</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Email</th>
+                <th>Contato</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Pedro Augusto</td>
+                <td>pedrosa.costa93@gmail.com</td>
+                <td><a href="#" class="link">Entrar em Contato</a></td>
+            </tr>
+            <tr>
+                <td>Wesley Castilho</td>
+                <td>wesleyguilhermecastilho@gmail.com
+                </td>
+                <td><a href="#" class="link">Entrar em Contato</a></td>
+            </tr>
+            <!-- Adicione mais linhas conforme necessário -->
+        </tbody>
+    </table>
+    <h2>Documentos</h2>
+    <table id="documentosTable">
+        <thead>
+            <tr>
+                <th>Data</th>
+                <th>Aluno</th>
+                <th>Descrição</th>
+                <th>Acesso</th>
+            </tr>
+        </thead>
+        <tbody id="documentosBody">
+            <!-- Dados da planilha serão adicionados aqui -->
+        </tbody>
+    </table>
+</div>
+
+<script>
+    // Função para carregar os dados da planilha
+    function carregarDados() {
+        // URL da planilha do Google Sheets no formato CSV
+        var url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT6WZTau0PfDkcRtsd8Qt95_mCEpm1RK7jRNbDEflSxdconeTf3EP1kE8Tf-_UU0F-wCtszfsBb2Pv-/pub?output=csv";
+
+        // Fazer solicitação para obter os dados da planilha
+        fetch(url)
+            .then(response => response.text())
+            .then(data => {
+                // Dividir os dados em linhas
+                var rows = data.split('\n');
+                // Iterar sobre as linhas e adicionar linhas à tabela
+                rows.forEach(row => {
+                    var columns = row.split(',');
+                    var tableRow = document.createElement("tr");
+                    columns.forEach((column, index) => {
+                        var cell = document.createElement("td");
+                        if (index === columns.length - 1) { // Se for a última coluna
+                            var link = document.createElement("a");
+                            link.href = column; // O último valor da linha é o URL
+                            link.textContent = "Acessar"; // Texto do link
+                            link.classList.add("link");
+                            cell.appendChild(link);
+                        } else {
+                            cell.textContent = column;
+                        }
+                        tableRow.appendChild(cell);
+                    });
+                    document.getElementById("documentosBody").appendChild(tableRow);
+                });
+            })
+            .catch(error => console.error('Erro ao carregar os dados da planilha:', error));
+    }
+
+    // Chamar a função para carregar os dados quando a página carregar
+    window.onload = carregarDados;
+</script>
+
+</body>
+</html>
